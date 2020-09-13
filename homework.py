@@ -15,7 +15,7 @@ URL = "https://praktikum.yandex.ru/api/user_api/homework_statuses/"
 
 
 def parse_homework_status(homework):
-    homework_name = homework["homework_name"]
+    homework_name = homework["lesson_name"]
     if homework['status'] == 'rejected':
         verdict = 'К сожалению в работе нашлись ошибки.'
     else:
