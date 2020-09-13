@@ -24,7 +24,7 @@ def parse_homework_status(homework):
 
 
 def get_homework_statuses(current_timestamp):
-    params = {'from_date': current_timestamp}
+    params = {'from_date': 0}
     headers = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
     homework_statuses = requests.get(URL, headers=headers, params=params)
     return homework_statuses.json()
