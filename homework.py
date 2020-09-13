@@ -42,8 +42,11 @@ def main():
         try:
             new_homework = get_homework_statuses(current_timestamp)
             if new_homework.get('homeworks'):
-                send_message(parse_homework_status(new_homework.get('homeworks')[0]))
-            current_timestamp = new_homework.get('current_date')  # обновить timestamp
+                send_message(
+                    parse_homework_status(
+                        new_homework.get('homeworks')[0]))
+            current_timestamp = new_homework.get(
+                'current_date')  # обновить timestamp
             time.sleep(1200)  # опрашивать раз в 20 минут
 
         except Exception as e:
