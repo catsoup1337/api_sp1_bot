@@ -2,6 +2,7 @@ import os
 import requests
 import telegram
 import time
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,10 +14,18 @@ CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
 URL = "https://praktikum.yandex.ru/api/user_api/homework_statuses/"
 
+logging.basicConfig(
+    filename="homework.log",
+    format="%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s",
+)
+
 
 def parse_homework_status(homework):
-    homework_name = homework["lesson_name"]
-    if homework['status'] == 'rejected':
+    homework_name = homework.get('homework_name')
+    if homework_name is None:
+        logging.error(f'Praktikum API returned invalid response: {homework}')
+        return {}
+    if homework.get('status') == 'rejected':
         verdict = 'К сожалению в работе нашлись ошибки.'
     else:
         verdict = 'Ревьюеру всё понравилось, можно приступать к следующему уроку.'
@@ -24,9 +33,14 @@ def parse_homework_status(homework):
 
 
 def get_homework_statuses(current_timestamp):
-    params = {'from_date': 0}
+    params = {'from_date': current_timestamp}
     headers = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
-    homework_statuses = requests.get(URL, headers=headers, params=params)
+    try:
+        homework_statuses = requests.get(URL, headers=headers, params=params)
+    except requests.RequestException:
+        logging.error(
+            f'Praktikum API is unavailable. url: {url}, params: {params}')
+        return {}
     return homework_statuses.json()
 
 
