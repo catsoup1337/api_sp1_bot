@@ -3,7 +3,7 @@ env/
 venv/
 .venv
 .venv/
-
+.vscode/
 __pycache__/
 *.py[cod]
 
@@ -20,5 +20,6 @@ sandwich.py
 static/
 posts/static/
 media/
+.vscode/
 
 db.sqlite3
